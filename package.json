@@ -12,6 +12,7 @@
   "engines": {
     "node": ">=5"
   },
+  "public": true,
   "scripts": {
     "test": "npm run build && jest",
     "test:watch": "npm test -- --watch",
