@@ -65,7 +65,7 @@ const packagingEnum = new Enum(packagingData);
 
 // Get Enum value by name property
 packagingEnum.Small.value; // 0
-packagingEnum.Small.Label; // 'Small size'
+packagingEnum.Small.label; // 'Small size'
 
 // Get Enum object by name property
 packagingEnum.Small; // {value: 0, name: 'Small', label: 'Small size'}
