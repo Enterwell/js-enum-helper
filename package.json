@@ -1,0 +1,36 @@
+{
+  "name": "@enterwell/enum-helper",
+  "version": "1.0.1",
+  "description": "",
+  "license": "MIT",
+  "repository": "",
+  "author": {
+    "name": "Enterwell",
+    "email": "services@enterwell.net",
+    "url": "http://enterwell.net"
+  },
+  "engines": {
+    "node": ">=5"
+  },
+  "scripts": {
+    "test": "npm run build && jest",
+    "test:watch": "npm test -- --watch",
+    "build": "babel src/ -d dist"
+  },
+  "main": "index.js",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "keywords": [
+    ""
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-jest": "^18.0.0",
+    "babel-plugin-transform-object-rest-spread": "^6.22.0",
+    "babel-preset-es2015": "^6.22.0",
+    "jest": "^18.1.0"
+  }
+}
