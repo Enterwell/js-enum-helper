@@ -52,24 +52,28 @@ import Enum from '@enterwell/enum-helper';
 
 // Enum data
 const packagingData = [
-  {value: 0, name: 'Small', label: 'Malo pakiranje'},
-  {value: 1, name: 'Big', label: 'Veliko pakiranje'}
+  {value: 0, name: 'Small', label: 'Small size'},
+  {value: 1, name: 'Large', label: 'Large size'}
 ];
 
-// Create packagingEnum object (enum representation)
+// Create packagingEnum object (enum representation) from enum data
 const packagingEnum = new Enum(packagingData);
 
 // Get Enum value by name property
 packagingEnum.Small.value; // 0
+packagingEnum.Small.Label; // 'Small size'
 
 // Get Enum object by name property
-packagingEnum.Small; // {value: 0, name: 'Small', label: 'Malo pakiranje'}
+packagingEnum.Small; // {value: 0, name: 'Small', label: 'Small size'}
 
-// Get Enum object by name with .get method
-packagingEnum.get('Small'); // {value: 0, name: 'Small', label: 'Malo pakiranje'}
+// Get Enum object by enum value with .get method
+packagingEnum.get(0); // {value: 0, name: 'Small', label: 'Small size'}
 
 // Return original array with which Enum object was initalized
 packagingEnum.toArray(); // The same as packagingData const 
+
+// Get to not existing value throws an exception
+packagingEnum.get(100); // ReferenceError ('Enum object not found');
 
 ```
 
