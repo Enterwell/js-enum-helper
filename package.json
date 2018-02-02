@@ -1,9 +1,9 @@
 {
   "name": "@enterwell/enum-helper",
   "version": "1.0.1",
-  "description": "",
+  "description": "JavaScript enum helper.",
   "license": "MIT",
-  "repository": "",
+  "repository": "https://github.com/Enterwell/js-enum-helper",
   "author": {
     "name": "Enterwell",
     "email": "services@enterwell.net",
