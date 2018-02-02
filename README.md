@@ -10,6 +10,10 @@ Features:
 ```
 $ npm install --save @enterwell/enum-helper
 ```
+or with yarn
+```
+$ yarn add @enterwell/enum-helper
+```
 
 
 ## Usage
