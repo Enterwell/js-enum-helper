@@ -8,3 +8,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 - `@enterwell/token-service` npm dependency
 - `isomorphic-fetch` npm dependency
+
+## [1.0.3] - 2018-02-02
+- NPM Package published to GitHub and made public.
