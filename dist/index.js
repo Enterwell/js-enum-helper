@@ -54,6 +54,15 @@ var Enum = function () {
         value: function _setEnumData(enumData) {
             // sets the enum data as properties
             enumData.forEach(function (singleEnum) {
+                // Validate enum name - have to be string
+                if (typeof singleEnum.name !== 'string') throw new TypeError('Enum name have to be string value!');
+
+                // Validate enum value - have to be number    
+                if (typeof singleEnum.value !== 'number') throw new TypeError('Enum value have to be an integer!');
+
+                // If enum already contains object with same name
+                if (this[singleEnum.name] !== undefined) throw new TypeError('Enum already contains an object with same name!');
+
                 // sets the data as property
                 this[singleEnum.name] = singleEnum;
             }, this);
@@ -75,6 +84,9 @@ var Enum = function () {
         value: function _setEnumDataToArray(enumData) {
             // iterates over the enum data
             enumData.forEach(function (singleEnum) {
+                // Check if object with same value already exists
+                if (this._array[singleEnum.value] !== undefined) throw new TypeError('Enum already contains an object with same value!');
+
                 this._array[singleEnum.value] = singleEnum;
             }, this);
         }
@@ -114,7 +126,9 @@ var Enum = function () {
         key: 'toArray',
         value: function toArray() {
             // Copy array and return the copy
-            return this._array.slice();
+            return this._array.filter(function (e) {
+                return e;
+            });
         }
     }]);
 
