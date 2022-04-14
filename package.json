@@ -19,7 +19,8 @@
     "test:watch": "npm test -- --watch",
     "build": "babel --extensions \".ts\" src/ -d dist && tsc --noEmit false --emitDeclarationOnly "
   },
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
