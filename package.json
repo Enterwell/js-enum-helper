@@ -14,13 +14,13 @@
   },
   "public": true,
   "scripts": {
-    "test": "npm run build && jest",
+    "check-types": "tsc",
+    "test": "npm run build && npm run check-types && jest",
     "test:watch": "npm test -- --watch",
-    "build": "babel src/ -d dist"
+    "build": "babel --extensions \".ts\" src/ -d dist && tsc --noEmit false --emitDeclarationOnly "
   },
   "main": "index.js",
   "files": [
-    "src",
     "dist"
   ],
   "keywords": [
@@ -28,10 +28,12 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "babel-cli": "^6.22.2",
-    "babel-jest": "^18.0.0",
-    "babel-plugin-transform-object-rest-spread": "^6.22.0",
-    "babel-preset-es2015": "^6.22.0",
-    "jest": "^18.1.0"
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.9",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-typescript": "^7.16.7",
+    "babel-jest": "^27.5.1",
+    "jest": "^27.5.1",
+    "typescript": "^4.6.3"
   }
 }

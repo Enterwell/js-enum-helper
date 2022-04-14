@@ -1,9 +1,23 @@
+export interface EnumType {
+    [key: string]: EnumDef | undefined;
+}
+
+export interface EnumDef {
+    name: string,
+    value: number,
+    label: string
+}
+
 /**
  * Representation of the enum.
  * 
  * @class Enum
  */
 class Enum {
+    [key: string]: EnumDef | undefined | ((enumValue: number) => EnumDef) | (() => EnumDef[]) | ((enumData: EnumDef[]) => void) | EnumDef[];
+    
+    _array: EnumDef[] = [];
+
     /**
      * Creates an instance of Enum.
      * 
@@ -14,9 +28,11 @@ class Enum {
      * 
      * @memberOf Enum
      */
-    constructor(enumData) {
-        // defines the array
-        this._array = [];
+    constructor(enumData: EnumDef[]) {
+        this._setEnumData = this._setEnumData.bind(this);
+        this._setEnumDataToArray = this._setEnumDataToArray.bind(this);
+        this.get = this.get.bind(this);
+        this.toArray = this.toArray.bind(this);
 
         // sets the enum data to object
         this._setEnumData(enumData);
@@ -35,9 +51,9 @@ class Enum {
      * 
      * @memberOf Enum
      */
-    _setEnumData(enumData) {
+    _setEnumData(enumData: EnumDef[]) {
         // sets the enum data as properties
-        enumData.forEach(function (singleEnum) {
+        enumData.forEach((singleEnum) => {
             // Validate enum name - have to be string
             if (typeof singleEnum.name !== 'string')
                 throw new TypeError('Enum name have to be string value!');
@@ -52,7 +68,7 @@ class Enum {
 
             // sets the data as property
             this[singleEnum.name] = singleEnum;
-        }, this);
+        });
     }
 
     /**
@@ -65,15 +81,15 @@ class Enum {
      * 
      * @memberOf Enum
      */
-    _setEnumDataToArray(enumData) {
+    _setEnumDataToArray(enumData: EnumDef[]) {
         // iterates over the enum data
-        enumData.forEach(function (singleEnum) {
+        enumData.forEach((singleEnum) => {
             // Check if object with same value already exists
             if (this._array[singleEnum.value] !== undefined)
                 throw new TypeError('Enum already contains an object with same value!');
 
             this._array[singleEnum.value] = singleEnum;
-        }, this);
+        });
     }
 
     /**
@@ -83,7 +99,7 @@ class Enum {
      * 
      * @memberOf Enum
      */
-    get(enumValue) {
+    get(enumValue: number) {
         // Get enum object from array by value key
         const enumObject = this._array[enumValue];
 
@@ -99,7 +115,6 @@ class Enum {
 
     /**
      * Returns the enum array
-     * 
      * 
      * @memberOf Enum
      */

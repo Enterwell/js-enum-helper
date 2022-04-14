@@ -1,4 +1,7 @@
 {
-  "plugins": ["babel-plugin-transform-object-rest-spread"],
-  "presets": ["babel-preset-es2015"]
+  "plugins": [],
+  "presets": [
+    "@babel/preset-typescript",
+    "@babel/preset-env"
+  ]
 }
