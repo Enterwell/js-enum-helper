@@ -13,6 +13,9 @@
     "node": ">=5"
   },
   "public": true,
+  "publishConfig": {
+    "access": "public"
+  }
   "scripts": {
     "check-types": "tsc",
     "test": "npm run build && npm run check-types && jest",
