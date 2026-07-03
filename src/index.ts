@@ -1,11 +1,40 @@
-export interface EnumType {
-    [key: string]: EnumDef | undefined;
+export type EnumValue = number;
+
+export interface EnumDef<
+    TValue extends EnumValue = EnumValue,
+    TName extends string = string,
+    TLabel extends string = string
+> {
+    name: TName,
+    value: TValue,
+    label: TLabel
 }
 
-export interface EnumDef {
-    name: string,
-    value: number,
-    label: string
+export type EnumData = readonly EnumDef[];
+export type EnumItem<TEnumData extends EnumData> = TEnumData[number];
+export type EnumByName<TEnumData extends EnumData> = {
+    [TEnum in EnumItem<TEnumData> as TEnum['name']]: TEnum;
+};
+export type EnumByValue<
+    TEnumData extends EnumData,
+    TValue extends EnumItem<TEnumData>['value']
+> = Extract<EnumItem<TEnumData>, { value: TValue }>;
+export type EnumType<TEnumData extends EnumData = EnumData> = EnumByName<TEnumData>;
+
+export interface EnumMethods<TEnumData extends EnumData = EnumData> {
+    _array: EnumItem<TEnumData>[];
+    _setEnumData(enumData: TEnumData): void;
+    _setEnumDataToArray(enumData: TEnumData): void;
+    get<TValue extends EnumItem<TEnumData>['value']>(enumValue: TValue): EnumByValue<TEnumData, TValue>;
+    get(enumValue: EnumValue): EnumItem<TEnumData>;
+    toArray(): EnumItem<TEnumData>[];
+}
+
+export type EnumInstance<TEnumData extends EnumData = EnumData> = EnumMethods<TEnumData> & EnumType<TEnumData>;
+export type Enum<TEnumData extends EnumData = EnumData> = EnumInstance<TEnumData>;
+
+export interface EnumConstructor {
+    new <const TEnumData extends EnumData>(enumData: TEnumData): EnumInstance<TEnumData>;
 }
 
 /**
@@ -13,10 +42,8 @@ export interface EnumDef {
  * 
  * @class Enum
  */
-class Enum {
-    [key: string]: EnumDef | undefined | ((enumValue: number) => EnumDef) | (() => EnumDef[]) | ((enumData: EnumDef[]) => void) | EnumDef[];
-    
-    _array: EnumDef[] = [];
+class EnumImpl<const TEnumData extends EnumData = EnumData> implements EnumMethods<TEnumData> {
+    _array: EnumItem<TEnumData>[] = [];
 
     /**
      * Creates an instance of Enum.
@@ -28,7 +55,7 @@ class Enum {
      * 
      * @memberOf Enum
      */
-    constructor(enumData: EnumDef[]) {
+    constructor(enumData: TEnumData) {
         this._setEnumData = this._setEnumData.bind(this);
         this._setEnumDataToArray = this._setEnumDataToArray.bind(this);
         this.get = this.get.bind(this);
@@ -51,7 +78,9 @@ class Enum {
      * 
      * @memberOf Enum
      */
-    _setEnumData(enumData: EnumDef[]) {
+    _setEnumData(enumData: TEnumData) {
+        const enumObject = this as unknown as Record<string, EnumItem<TEnumData> | undefined>;
+
         // sets the enum data as properties
         enumData.forEach((singleEnum) => {
             // Validate enum name - have to be string
@@ -63,11 +92,11 @@ class Enum {
                 throw new TypeError('Enum value have to be an integer!');
 
             // If enum already contains object with same name
-            if (this[singleEnum.name] !== undefined)
+            if (enumObject[singleEnum.name] !== undefined)
                 throw new TypeError('Enum already contains an object with same name!');
 
             // sets the data as property
-            this[singleEnum.name] = singleEnum;
+            enumObject[singleEnum.name] = singleEnum;
         });
     }
 
@@ -81,7 +110,7 @@ class Enum {
      * 
      * @memberOf Enum
      */
-    _setEnumDataToArray(enumData: EnumDef[]) {
+    _setEnumDataToArray(enumData: TEnumData) {
         // iterates over the enum data
         enumData.forEach((singleEnum) => {
             // Check if object with same value already exists
@@ -99,7 +128,9 @@ class Enum {
      * 
      * @memberOf Enum
      */
-    get(enumValue: number) {
+    get<TValue extends EnumItem<TEnumData>['value']>(enumValue: TValue): EnumByValue<TEnumData, TValue>;
+    get(enumValue: EnumValue): EnumItem<TEnumData>;
+    get(enumValue: EnumValue) {
         // Get enum object from array by value key
         const enumObject = this._array[enumValue];
 
@@ -120,9 +151,11 @@ class Enum {
      */
     toArray() {
         // Copy array and return the copy
-        return this._array.filter(e => e);
+        return this._array.filter((e): e is EnumItem<TEnumData> => Boolean(e));
     }
 }
 
 // Export class
-export default Enum;
+const EnumConstructorValue = EnumImpl as EnumConstructor;
+
+export default EnumConstructorValue;
