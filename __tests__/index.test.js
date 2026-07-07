@@ -26,6 +26,19 @@ test("Should return correct enum object when calling .get(enumValue) method", ()
   expect(packagingEnum.get(packagingDataSmallValue)).toEqual(packagingData[0]);
 });
 
+test("Should support string enum values", () => {
+  const enumData = [
+    { value: 'draft', name: 'Draft', label: 'Draft' },
+    { value: 'published', name: 'Published', label: 'Published' }
+  ];
+
+  const testEnum = new Enum(enumData);
+
+  expect(testEnum.Draft.value).toBe('draft');
+  expect(testEnum.get('published')).toEqual(enumData[1]);
+  expect(testEnum.toArray()).toEqual(enumData);
+});
+
 test("Should throw when accessing Enum value that doesn't exist", () => {
   expect(() => {
     // Get enum with value that doesn't exist
@@ -76,11 +89,11 @@ test("Tries to create enum with invalid enum data", () => {
 
 
   expect(() => {
-    // Tries to create enum with two same names
+    // Tries to create enum with invalid value type
     new Enum([
       { value: 0, name: 'Zero', label: 'Zero enum value' },
-      { value: '1', name: 'One', label: 'One enum value' }
+      { value: true, name: 'One', label: 'One enum value' }
     ]);
-  }).toThrow('Enum value have to be an integer!');
+  }).toThrow('Enum value have to be number or string value!');
 
 });

@@ -1,12 +1,12 @@
 # @enterwell/enum-helper
 
-JavaScript enum helper for creating small enum-like objects that can be accessed by name, looked up by numeric value, and converted back to an array.
+JavaScript enum helper for creating small enum-like objects that can be accessed by name, looked up by number or string value, and converted back to an array.
 
 ## Features
 
 - Create an enum object from an array of enum definitions
 - Access enum entries by their `name`
-- Look up enum entries by their numeric `value`
+- Look up enum entries by their numeric or string `value`
 - Return enum entries as an array with `toArray()`
 - Preserve concrete TypeScript literal values for `value`, `name`, and `label`
 - Publish both ESM and CommonJS builds
@@ -25,7 +25,7 @@ yarn add @enterwell/enum-helper
 
 ## Requirements
 
-- Runtime enum values must be numbers.
+- Runtime enum values must be numbers or strings.
 - Runtime enum names and labels must be strings.
 - TypeScript consumers should use TypeScript 5 or newer so the package declarations can preserve literal values with `const` type parameters.
 
@@ -59,7 +59,7 @@ Creates an enum helper instance.
 
 ```typescript
 {
-  value: number;
+  value: number | string;
   name: string;
   label: string;
 }
@@ -78,13 +78,24 @@ packagingEnum.Large; // { value: 1, name: 'Large', label: 'Large size' }
 
 ### `get(enumValue)`
 
-Returns the enum entry for a numeric value.
+Returns the enum entry for a numeric or string value.
 
 ```javascript
 packagingEnum.get(1); // { value: 1, name: 'Large', label: 'Large size' }
 ```
 
 Throws `ReferenceError('Enum object not found')` when no enum entry exists for the given value.
+
+String values are supported too:
+
+```javascript
+const statusEnum = new Enum([
+  { value: 'draft', name: 'Draft', label: 'Draft' },
+  { value: 'published', name: 'Published', label: 'Published' }
+]);
+
+statusEnum.get('published'); // { value: 'published', name: 'Published', label: 'Published' }
+```
 
 ### `toArray()`
 
@@ -114,7 +125,7 @@ statusEnum.toArray().length; // 2
 The constructor validates enum data and throws:
 
 - `TypeError('Enum name have to be string value!')` when an entry name is not a string
-- `TypeError('Enum value have to be an integer!')` when an entry value is not a number
+- `TypeError('Enum value have to be number or string value!')` when an entry value is not a number or string
 - `TypeError('Enum already contains an object with same name!')` when names are duplicated
 - `TypeError('Enum already contains an object with same value!')` when values are duplicated
 
