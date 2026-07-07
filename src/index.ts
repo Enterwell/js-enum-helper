@@ -1,4 +1,4 @@
-export type EnumValue = number;
+export type EnumValue = number | string;
 
 export interface EnumDef<
     TValue extends EnumValue = EnumValue,
@@ -36,6 +36,10 @@ export type Enum<TEnumData extends EnumData = EnumData> = EnumInstance<TEnumData
 export interface EnumConstructor {
     new <const TEnumData extends EnumData>(enumData: TEnumData): EnumInstance<TEnumData>;
 }
+
+export type EnumValues<TEnumData extends EnumData> = EnumItem<TEnumData>['value'];
+export type EnumLabels<TEnumData extends EnumData> = EnumItem<TEnumData>['label'];
+
 
 /**
  * Representation of the enum.
